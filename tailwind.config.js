@@ -1,6 +1,6 @@
 module.exports = {
   mode: "jit",
-  darkMode: false,
+  darkMode: "media",
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./app/components/**/*.{js,ts,jsx,tsx}",

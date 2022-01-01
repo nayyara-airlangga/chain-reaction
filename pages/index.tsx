@@ -1,7 +1,16 @@
 import type { NextPage } from "next"
 import Head from "next/head"
 
-const Home: NextPage = () => {
+import {
+  Footer,
+  Navbar,
+  Loader,
+  Services,
+  Transactions,
+  Welcome,
+} from "@components"
+
+const HomePage: NextPage = () => {
   return (
     <div>
       <Head>
@@ -13,4 +22,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default HomePage

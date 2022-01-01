@@ -1,4 +1,4 @@
-import { Navbar, Footer } from "@components"
+import { Footer } from "@components"
 import type { AppProps } from "next/app"
 
 import "../app/styles/globals.css"
@@ -6,7 +6,6 @@ import "../app/styles/globals.css"
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <div className="font-display">
-      <Navbar />
       <Component {...pageProps} />
       <Footer />
     </div>

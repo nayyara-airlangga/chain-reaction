@@ -1,5 +1,5 @@
 const Welcome = () => {
-  return <div></div>
+  return <section id="#" className="gradient-bg-welcome"></section>
 }
 
 export { Welcome }

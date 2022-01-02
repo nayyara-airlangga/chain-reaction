@@ -19,6 +19,8 @@
       "@components": ["app/components"],
       "@components/*": ["app/components/*"],
       "@constants": ["app/constants"],
+      "@contexts": ["app/contexts"],
+      "@contexts/*": ["app/contexts/*"],
       "@hooks": ["app/hooks"],
       "@hooks/*": ["app/hooks/*"],
       "@models": ["app/models"],

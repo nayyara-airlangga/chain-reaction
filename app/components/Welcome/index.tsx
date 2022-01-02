@@ -1,11 +1,14 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { AiFillPlayCircle } from "react-icons/ai"
 
 import { CurrencyCard } from "./CurrencyCard"
 import { FeaturesGrid } from "./FeaturesGrid"
 import { TransactionForm } from "./TransactionForm"
+import { TransactionContext } from "@contexts"
 
 const Welcome = () => {
+  const { connectWallet, currentAccount } = useContext(TransactionContext)
+
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
     recipientAddress: "",
@@ -24,8 +27,6 @@ const Welcome = () => {
     event.preventDefault()
   }
 
-  const connectWallet = (event: React.MouseEvent<HTMLButtonElement>) => {}
-
   return (
     <section id="#" className="flex w-full justify-center items-center">
       <div className="flex md:flex-row flex-col items-start justify-between md:p-20 py-12 px-4">
@@ -37,17 +38,21 @@ const Welcome = () => {
             Explore the crypto world. Buy and sell cryptocurrencies easily on
             ChainReaction.
           </p>
-          <button
-            type="button"
-            onClick={connectWallet}
-            className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
-          >
-            <p className="text-white text-base font-semibold">Connect Wallet</p>
-          </button>
+          {!currentAccount && (
+            <button
+              type="button"
+              onClick={connectWallet}
+              className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
+            >
+              <p className="text-white text-base font-semibold">
+                Connect Wallet
+              </p>
+            </button>
+          )}
           <FeaturesGrid />
         </div>
         <div className="flex flex-col flex-1 items-center justify-start w-full md:mt-0 mt-10">
-          <CurrencyCard />
+          <CurrencyCard address={currentAccount ?? "Address"} />
           <TransactionForm
             formData={formData}
             isLoading={isLoading}

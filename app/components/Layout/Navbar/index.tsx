@@ -13,7 +13,7 @@ const Navbar = () => {
   return (
     <nav className="w-full flex md:justify-center justify-between items-center p-4">
       <div className="md:flex-[0.5] flex-initial items-center">
-        <div className="cursor-pointer relative w-32 h-32">
+        <div className="cursor-pointer relative w-16 h-16">
           <Image src={Logo} alt="Logo" layout="fill" objectFit="cover" />
         </div>
       </div>

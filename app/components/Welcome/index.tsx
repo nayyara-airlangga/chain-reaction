@@ -30,8 +30,8 @@ const Welcome = () => {
 
   return (
     <section id="#" className="flex w-full justify-center items-center">
-      <div className="flex md:flex-row flex-col items-start justify-between md:p-20 py-12 px-4">
-        <div className="flex flex-1 justify-start flex-col md:mr-10">
+      <div className="flex lg:flex-row flex-col items-start justify-between lg:m-20 my-12 mx-4">
+        <div className="flex flex-1 justify-start flex-col lg:mr-10">
           <h1 className="text-3xl sm:text-5xl text-white text-gradient py-1">
             Send Crypto <br /> across the world
           </h1>
@@ -52,7 +52,7 @@ const Welcome = () => {
           )}
           <FeaturesGrid />
         </div>
-        <div className="flex flex-col flex-1 items-center justify-start w-full md:mt-0 mt-10">
+        <div className="flex flex-col flex-1 items-center justify-start w-full lg:mt-0 mt-10">
           <CurrencyCard address={currentAccount ?? "Address"} />
           <TransactionForm
             formData={formData}

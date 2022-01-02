@@ -13,11 +13,12 @@ const Welcome = () => {
     formData,
     formHandler,
     sendTransaction,
+    isLoading,
   } = useContext(TransactionContext)
 
-  const [isLoading, setIsLoading] = useState(false)
-
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
     const { recipientAddress, amount, keyword, message } = formData
 
     if (!recipientAddress || !amount || !keyword || !message) {
@@ -25,8 +26,6 @@ const Welcome = () => {
     }
 
     await sendTransaction()
-
-    event.preventDefault()
   }
 
   return (

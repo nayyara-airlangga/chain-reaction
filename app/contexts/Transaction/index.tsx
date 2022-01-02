@@ -17,6 +17,7 @@ type TransactionProviderProps = {
 }
 
 type TransactionContextProps = {
+  isLoading: boolean
   connectWallet: () => Promise<void>
   currentAccount: string
   formData: FormData
@@ -25,6 +26,7 @@ type TransactionContextProps = {
 }
 
 const TransactionContext = createContext<TransactionContextProps>({
+  isLoading: false,
   connectWallet: async () => {},
   currentAccount: "",
   formData: {
@@ -133,6 +135,13 @@ const TransactionProvider = ({ children }: TransactionProviderProps) => {
       setIsLoading(false)
       console.log(`Success - ${transactionHash.hash}`)
 
+      setFormData({
+        recipientAddress: "",
+        amount: "",
+        keyword: "",
+        message: "",
+      })
+
       const transactionCount = await transactionContract.getTransactionCount()
 
       setTransactionCount(transactionCount.toNumber())
@@ -155,6 +164,7 @@ const TransactionProvider = ({ children }: TransactionProviderProps) => {
         formData,
         formHandler,
         sendTransaction,
+        isLoading,
       }}
     >
       {children}

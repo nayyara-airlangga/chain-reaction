@@ -26,7 +26,6 @@ const TransactionForm = ({
   return (
     <form
       method="POST"
-      action="/"
       onSubmit={submitHandler}
       className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism"
     >

@@ -7,23 +7,25 @@ import { TransactionForm } from "./TransactionForm"
 import { TransactionContext } from "@contexts"
 
 const Welcome = () => {
-  const { connectWallet, currentAccount } = useContext(TransactionContext)
+  const {
+    connectWallet,
+    currentAccount,
+    formData,
+    formHandler,
+    sendTransaction,
+  } = useContext(TransactionContext)
 
   const [isLoading, setIsLoading] = useState(false)
-  const [formData, setFormData] = useState({
-    recipientAddress: "",
-    amount: "",
-    keyword: "",
-    message: "",
-  })
 
-  const formHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value
+  const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+    const { recipientAddress, amount, keyword, message } = formData
 
-    setFormData({ ...formData, [event.target.name]: value })
-  }
+    if (!recipientAddress || !amount || !keyword || !message) {
+      return
+    }
 
-  const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    await sendTransaction()
+
     event.preventDefault()
   }
 

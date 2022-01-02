@@ -1,24 +1,62 @@
-import dynamic from "next/dynamic"
-import { useState, useEffect, createContext } from "react"
+import React, { useState, useEffect, createContext } from "react"
 import { ethers } from "ethers"
 
 import { ContractAbi, ContactAddress } from "@constants"
 
 declare let window: any
 
+type FormData = {
+  recipientAddress: string
+  amount: string
+  keyword: string
+  message: string
+}
+
 type TransactionProviderProps = {
   children: React.ReactNode
 }
 
-const TransactionContext = createContext({
+type TransactionContextProps = {
+  connectWallet: () => Promise<void>
+  currentAccount: string
+  formData: FormData
+  formHandler: (event: React.ChangeEvent<HTMLInputElement>) => void
+  sendTransaction: () => Promise<void>
+}
+
+const TransactionContext = createContext<TransactionContextProps>({
   connectWallet: async () => {},
   currentAccount: "",
+  formData: {
+    recipientAddress: "",
+    amount: "",
+    keyword: "",
+    message: "",
+  },
+  formHandler: (event: React.ChangeEvent<HTMLInputElement>) => {},
+  sendTransaction: async () => {},
 })
 
 const TransactionProvider = ({ children }: TransactionProviderProps) => {
   const ethereum = window.ethereum
 
+  const [isLoading, setIsLoading] = useState(false)
+  const [transactionCount, setTransactionCount] = useState(
+    localStorage.getItem("transactionCount")
+  )
   const [currentAccount, setCurrentAccount] = useState<string>("")
+  const [formData, setFormData] = useState({
+    recipientAddress: "",
+    amount: "",
+    keyword: "",
+    message: "",
+  })
+
+  const formHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value
+
+    setFormData({ ...formData, [event.target.name]: value })
+  }
 
   const checkIfWalletIsConnected = async () => {
     try {
@@ -57,12 +95,68 @@ const TransactionProvider = ({ children }: TransactionProviderProps) => {
     }
   }
 
+  const sendTransaction = async () => {
+    try {
+      if (!ethereum) {
+        return alert("Please install metamask")
+      }
+
+      const { recipientAddress, amount, keyword, message } = formData
+      const parsedAmount = ethers.utils.parseEther(amount)
+
+      const transactionContract = getEthereumContract()
+
+      await ethereum.request({
+        method: "eth_sendTransaction",
+        params: [
+          {
+            from: currentAccount,
+            to: recipientAddress,
+            gas: "0x5208", // 21000 Gwei
+            value: parsedAmount._hex,
+          },
+        ],
+      })
+
+      const transactionHash = await transactionContract.addToBlockchain(
+        recipientAddress,
+        parsedAmount,
+        message,
+        keyword
+      )
+
+      setIsLoading(true)
+      console.log(`Loading - ${transactionHash.hash}`)
+
+      await transactionHash.wait()
+
+      setIsLoading(false)
+      console.log(`Success - ${transactionHash.hash}`)
+
+      const transactionCount = await transactionContract.getTransactionCount()
+
+      setTransactionCount(transactionCount.toNumber())
+    } catch (error) {
+      console.log(error)
+
+      throw new Error("No ethereum object found")
+    }
+  }
+
   useEffect(() => {
     checkIfWalletIsConnected()
   })
 
   return (
-    <TransactionContext.Provider value={{ connectWallet, currentAccount }}>
+    <TransactionContext.Provider
+      value={{
+        connectWallet,
+        currentAccount,
+        formData,
+        formHandler,
+        sendTransaction,
+      }}
+    >
       {children}
     </TransactionContext.Provider>
   )
@@ -79,7 +173,7 @@ const getEthereumContract = () => {
     signer
   )
 
-  console.log({ provider, signer, transactionContract })
+  return transactionContract
 }
 
 export { TransactionContext, TransactionProvider }

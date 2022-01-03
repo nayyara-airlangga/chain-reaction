@@ -9,9 +9,7 @@ const Services = () => {
     >
       <div className="flex lg:flex-row flex-col items-center justify-between lg:m-20 my-12 mx-4">
         <div className="flex flex-1 flex-col justify-start items-start">
-          <h1 className="text-white text-3xl sm:text-5xl my-2 text-gradient">
-            Our Services
-          </h1>
+          <h1 className="text-white text-3xl sm:text-5xl my-2">Our Services</h1>
         </div>
       </div>
       <div className="flex flex-1 flex-col justify-items-start lg:m-20 my-8 mx-4">

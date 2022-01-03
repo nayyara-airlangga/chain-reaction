@@ -23,6 +23,7 @@ type TransactionContextProps = {
   formData: FormData
   formHandler: (event: React.ChangeEvent<HTMLInputElement>) => void
   sendTransaction: () => Promise<void>
+  networkChain: string
 }
 
 const TransactionContext = createContext<TransactionContextProps>({
@@ -37,10 +38,12 @@ const TransactionContext = createContext<TransactionContextProps>({
   },
   formHandler: (event: React.ChangeEvent<HTMLInputElement>) => {},
   sendTransaction: async () => {},
+  networkChain: "",
 })
 
 const TransactionProvider = ({ children }: TransactionProviderProps) => {
   const ethereum = window.ethereum
+  const networkChain = ethereum.chainId
 
   const [isLoading, setIsLoading] = useState(false)
   const [transactionCount, setTransactionCount] = useState(
@@ -165,6 +168,7 @@ const TransactionProvider = ({ children }: TransactionProviderProps) => {
         formHandler,
         sendTransaction,
         isLoading,
+        networkChain,
       }}
     >
       {children}

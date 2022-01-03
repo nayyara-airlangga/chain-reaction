@@ -122,6 +122,10 @@ const TransactionProvider = ({ children }: TransactionProviderProps) => {
 
   const checkIfTransactionsExist = async () => {
     try {
+      if (!ethereum) {
+        return alert("Please install metamask")
+      }
+
       const transactionContract = getEthereumContract()
       const transactionCount = await transactionContract.getTransactionCount()
 

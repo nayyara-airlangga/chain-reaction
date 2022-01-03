@@ -46,7 +46,12 @@ const TransactionContext = createContext<TransactionContextProps>({
 
 const TransactionProvider = ({ children }: TransactionProviderProps) => {
   const ethereum = window.ethereum
-  const networkChain = ethereum.chainId
+
+  let networkChain = ""
+
+  if (ethereum) {
+    networkChain = ethereum.chainId
+  }
 
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -123,7 +128,7 @@ const TransactionProvider = ({ children }: TransactionProviderProps) => {
   const checkIfTransactionsExist = async () => {
     try {
       if (!ethereum) {
-        return alert("Please install metamask")
+        return
       }
 
       const transactionContract = getEthereumContract()

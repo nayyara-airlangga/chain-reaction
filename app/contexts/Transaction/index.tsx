@@ -195,8 +195,9 @@ const TransactionProvider = ({ children }: TransactionProviderProps) => {
       })
 
       const transactionCount = await transactionContract.getTransactionCount()
-
       setTransactionCount(transactionCount.toNumber())
+
+      window.reload()
     } catch (error) {
       console.log(error)
 
@@ -207,7 +208,7 @@ const TransactionProvider = ({ children }: TransactionProviderProps) => {
   useEffect(() => {
     checkIfWalletIsConnected()
     checkIfTransactionsExist()
-  })
+  }, [])
 
   return (
     <TransactionContext.Provider

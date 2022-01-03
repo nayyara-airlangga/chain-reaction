@@ -2,6 +2,7 @@ import React, { useState, useEffect, createContext } from "react"
 import { ethers } from "ethers"
 
 import { ContractAbi, ContactAddress } from "@constants"
+import { Transaction } from "@models"
 
 declare let window: any
 
@@ -24,6 +25,7 @@ type TransactionContextProps = {
   formHandler: (event: React.ChangeEvent<HTMLInputElement>) => void
   sendTransaction: () => Promise<void>
   networkChain: string
+  transactions: Transaction[]
 }
 
 const TransactionContext = createContext<TransactionContextProps>({
@@ -39,12 +41,14 @@ const TransactionContext = createContext<TransactionContextProps>({
   formHandler: (event: React.ChangeEvent<HTMLInputElement>) => {},
   sendTransaction: async () => {},
   networkChain: "",
+  transactions: [],
 })
 
 const TransactionProvider = ({ children }: TransactionProviderProps) => {
   const ethereum = window.ethereum
   const networkChain = ethereum.chainId
 
+  const [transactions, setTransactions] = useState<Transaction[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [transactionCount, setTransactionCount] = useState(
     localStorage.getItem("transactionCount")
@@ -63,6 +67,38 @@ const TransactionProvider = ({ children }: TransactionProviderProps) => {
     setFormData({ ...formData, [event.target.name]: value })
   }
 
+  const getAllTransactions = async () => {
+    try {
+      if (!ethereum) {
+        return alert("Please install metamask")
+      }
+
+      const transactionContract = getEthereumContract()
+
+      const availableTransactions =
+        await transactionContract.getAllTransactions()
+
+      const structuredTransactions = availableTransactions.map(
+        (transaction: Transaction) => ({
+          id: transaction.id,
+          receiver: transaction.receiver,
+          sender: transaction.sender,
+          amount: parseInt(transaction.amount._hex, 16) / 10 ** 18,
+          keyword: transaction.keyword,
+          timestamp: new Date(
+            parseInt(transaction.timestamp) * 1000
+          ).toLocaleString(),
+          message: transaction.message,
+        })
+      )
+
+      setTransactions(structuredTransactions)
+    } catch (error) {
+      console.log(error)
+      throw new Error("No ethereum object found.")
+    }
+  }
+
   const checkIfWalletIsConnected = async () => {
     try {
       if (!ethereum) {
@@ -75,11 +111,24 @@ const TransactionProvider = ({ children }: TransactionProviderProps) => {
 
       if (accounts.length) {
         setCurrentAccount(accounts[0])
+        await getAllTransactions()
       } else {
         console.log("No accounts found")
       }
     } catch (error) {
       throw new Error("No ethereum object found.")
+    }
+  }
+
+  const checkIfTransactionsExist = async () => {
+    try {
+      const transactionContract = getEthereumContract()
+      const transactionCount = await transactionContract.getTransactionCount()
+
+      localStorage.setItem("transactionCount", transactionCount)
+    } catch (error) {
+      console.log(error)
+      throw new Error("No ethereum object found")
     }
   }
 
@@ -157,6 +206,7 @@ const TransactionProvider = ({ children }: TransactionProviderProps) => {
 
   useEffect(() => {
     checkIfWalletIsConnected()
+    checkIfTransactionsExist()
   })
 
   return (
@@ -169,6 +219,7 @@ const TransactionProvider = ({ children }: TransactionProviderProps) => {
         sendTransaction,
         isLoading,
         networkChain,
+        transactions,
       }}
     >
       {children}

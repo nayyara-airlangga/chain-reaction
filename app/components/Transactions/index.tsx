@@ -1,10 +1,10 @@
 import { useContext } from "react"
 
 import { TransactionContext } from "@contexts"
-import { shortenAddress } from "@utils"
+import { TransactionCard } from "./TransactionCard"
 
 const Transactions = () => {
-  const { currentAccount } = useContext(TransactionContext)
+  const { currentAccount, transactions } = useContext(TransactionContext)
 
   return (
     <section
@@ -18,7 +18,9 @@ const Transactions = () => {
             : "Connect your account to see your latest transactions"}
         </h3>
         <div className="flex flex-wrap justify-center items-center mt-10">
-          {}
+          {transactions.map((transaction, index) => (
+            <TransactionCard key={transaction.id} {...transaction} />
+          ))}
         </div>
       </div>
     </section>

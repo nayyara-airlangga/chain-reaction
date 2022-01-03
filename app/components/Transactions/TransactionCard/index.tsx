@@ -6,7 +6,7 @@ import { useFetchGIF } from "@hooks"
 import { getNetworkChain, shortenAddress } from "@utils"
 
 const TransactionCard = ({
-  recipient,
+  receiver,
   sender,
   timestamp,
   message,
@@ -22,9 +22,9 @@ const TransactionCard = ({
     networkChain
   )}etherscan.io/address/${sender}`
 
-  const recipientUrl = `https://${getNetworkChain(
+  const receiverUrl = `https://${getNetworkChain(
     networkChain
-  )}etherscan.io/address/${sender}`
+  )}etherscan.io/address/${receiver}`
 
   return (
     <div className="bg-[#181918] m-4 flex flex-1 2xl:min-w-[450px] 2xl:max-w-[500px] min-w-[270px] smax-w-[300px] flex-col p-3 hover:shadow-2xl">
@@ -35,9 +35,9 @@ const TransactionCard = ({
               From: {shortenAddress(sender)}
             </p>
           </a>
-          <a href={recipientUrl} target="_blank" rel="noopener noreferrer">
+          <a href={receiverUrl} target="_blank" rel="noopener noreferrer">
             <p className="text-white text-base">
-              To: {shortenAddress(recipient)}
+              To: {shortenAddress(receiver)}
             </p>
           </a>
           <p className="text-white text-base">Amount: {amount} ETH</p>
@@ -49,7 +49,7 @@ const TransactionCard = ({
           )}
         </div>
         <img
-          src={gifUrl || url}
+          src={gifUrl}
           alt="GIF"
           className="w-full h-64 2xl:h-96 rounded-md shadow-lg object-cover"
         />

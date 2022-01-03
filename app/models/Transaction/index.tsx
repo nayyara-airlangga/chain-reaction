@@ -1,3 +1,5 @@
+import { ethers } from "ethers"
+
 export interface Transaction {
   id: number
   url: string
@@ -5,6 +7,6 @@ export interface Transaction {
   keyword: string
   timestamp: string
   sender: string
-  recipient: string
-  amount: string
+  receiver: string
+  amount: ethers.BigNumber
 }

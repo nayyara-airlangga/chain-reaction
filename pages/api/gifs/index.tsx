@@ -14,7 +14,7 @@ const gifs = async (req: NextApiRequest, res: NextApiResponse) => {
       giphySearchUrl + "&q=" + keyword.split(" ").join("") + "&limit=1"
     )
 
-    const data = result.data
+    const data = result.data.data
 
     res.status(200).send(data[0]?.images?.downsized_medium?.url)
   } catch (error) {

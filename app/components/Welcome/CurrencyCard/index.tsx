@@ -1,6 +1,8 @@
 import { SiEthereum } from "react-icons/si"
 import { BsInfoCircle } from "react-icons/bs"
 
+import { shortenAddress } from "@utils"
+
 type CurrencyCardProps = {
   address?: string
 }
@@ -16,7 +18,9 @@ const CurrencyCard = ({ address = "0xABCDEF12" }: CurrencyCardProps) => {
           <BsInfoCircle fontSize={17} color="#fff" />
         </div>
         <div>
-          <p className="text-white font-light text-sm">{address}</p>
+          <p className="text-white font-light text-sm">
+            {shortenAddress(address)}
+          </p>
           <p className="text-white font-semibold text-lg mt-1">Ethereum</p>
         </div>
       </div>

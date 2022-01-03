@@ -5,7 +5,7 @@ import { RiHeart2Fill } from "react-icons/ri"
 const ServiceItems = [
   {
     bgColor: "bg-[#2952e3]",
-    title: "Guaranteed security",
+    title: "Great and improving security",
     subtitle:
       "We're constantly improving our security measures so that every transaction made here remains secure.",
     icon: <BsShieldFillCheck fontSize={21} className="text-white" />,

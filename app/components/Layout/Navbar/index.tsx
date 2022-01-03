@@ -21,9 +21,9 @@ const Navbar = () => {
         {NavItems.map((navItem, index) => (
           <NavLink key={navItem + index}>{navItem}</NavLink>
         ))}
-        <li className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]">
+        {/* <li className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]">
           Login
-        </li>
+        </li> */}
       </ul>
       <div className="flex relative">
         {navIsOpen ? (
